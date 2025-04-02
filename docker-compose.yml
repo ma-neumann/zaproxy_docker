@@ -1,0 +1,26 @@
+version: '3'
+services:
+
+  proxy:
+    image: zaproxy/zap-stable
+    command: zap-webswing.sh
+    restart: always
+    volumes:
+      - ./docker/demo:/zap/wrk
+    networks:
+      demo:
+        ipv4_address: 192.168.64.2
+        
+  webapp:
+    image: vulnerables/web-dvwa:latest
+    restart: always
+    networks:
+      demo:
+        ipv4_address: 192.168.64.3
+
+networks:
+  demo:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 192.168.64.0/29
